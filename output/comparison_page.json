@@ -1,0 +1,41 @@
+{
+  "products": {
+    "GlowBoost Vitamin C Serum": {
+      "ingredients": [
+        "Vitamin C",
+        "Hyaluronic Acid"
+      ],
+      "benefits": [
+        "Brightening",
+        "Fades dark spots",
+        "Deep hydration",
+        "Plumps skin"
+      ],
+      "price": 699,
+      "best_for": "Individuals with dry to normal skin seeking brightening effects and intense hydration. Ideal for those focused on targeting hyperpigmentation and dark spots while maintaining skin moisture levels."
+    },
+    "RadiantFix Vitamin C Serum": {
+      "ingredients": [
+        "Vitamin C",
+        "Niacinamide",
+        "Vitamin E"
+      ],
+      "benefits": [
+        "Brightening",
+        "Oil control",
+        "Antioxidant protection",
+        "Minimizes pores",
+        "Improves skin texture"
+      ],
+      "price": 899,
+      "best_for": "Individuals with oily to combination skin who want comprehensive skincare benefits. Perfect for those seeking brightening along with sebum control, pore refinement, and enhanced environmental protection."
+    }
+  },
+  "key_differences": [
+    "Hydration vs Oil Control: GlowBoost features Hyaluronic Acid for moisture retention, making it suitable for dry skin, while RadiantFix contains Niacinamide for sebum regulation, better suited for oily skin types",
+    "Ingredient Complexity: RadiantFix offers a more comprehensive formula with three active ingredients (Vitamin C, Niacinamide, Vitamin E) providing multi-functional benefits, whereas GlowBoost focuses on a targeted two-ingredient approach",
+    "Price Point: GlowBoost is more budget-friendly at ₹699, offering essential brightening and hydration, while RadiantFix is priced at ₹899 reflecting its broader range of benefits including antioxidant protection and oil control",
+    "Primary Focus: GlowBoost specializes in hyperpigmentation treatment and hydration, while RadiantFix provides all-around skin improvement including texture refinement and environmental defense"
+  ],
+  "verdict": "Choose GlowBoost Vitamin C Serum if you have dry or dehydrated skin and your primary concern is dark spots and maintaining moisture. It offers excellent value for targeted brightening and hydration. Opt for RadiantFix Vitamin C Serum if you have oily or combination skin and want a multi-tasking product that addresses brightening, oil control, and provides antioxidant protection. The additional ₹200 investment delivers broader skincare benefits and more comprehensive skin improvement, making it worthwhile for those seeking an all-in-one solution."
+}
