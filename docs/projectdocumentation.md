@@ -1,6 +1,6 @@
 # Content Management System - Agentic Pipeline
 
-A modular agentic system that automatically generates product content pages given a product data JSON object. This agent uses a multi agent Orchestrator-Worker pattern provided by Langgraph to coordinate specialized workers that handle question generation, page assembly, and content synthesis. 
+A modular Multi agentic system that automatically generates product content pages given a product data JSON object. This agent uses a multi agent Orchestrator-Worker pattern provided by Langgraph to coordinate specialized workers that handle question generation, page assembly, and content synthesis. 
 
 ## Features
 

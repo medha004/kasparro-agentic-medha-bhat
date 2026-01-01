@@ -1,16 +1,55 @@
 from src.services.agents.base import BaseAgent
 from src.services.llm_service import get_llm_service
+from src.utils.messages import MessageType
+from typing import Dict, Any
 import json
 
 
 class QuestionGenerationAgent(BaseAgent):
-    name = "question-generation-agent"
+    """
+    Autonomous agent that generates categorized questions about products.
+    Demonstrates agent self-selection and LLM-based content generation.
+    """
+    name = "question_gen_worker"
+    capabilities = ["generate_questions", "content_strategy", "question_categorization"]
 
     def __init__(self):
+        super().__init__()
         self.llm = get_llm_service()
+    
+    def should_activate(self, state: Dict[str, Any]) -> bool:
+        """
+        Activate if questions don't exist or regeneration is requested.
+        """
+        # Check if questions already generated
+        if not state.get("questions"):
+            print(f"[{self.name}] Activating: Questions not yet generated")
+            return True
+        
+        # Check for regeneration requests
+        messages = self.read_messages(state)
+        for msg in messages:
+            if msg.message_type == MessageType.REQUEST:
+                if msg.content.get("action") == "regenerate" or msg.content.get("target") == "questions":
+                    print(f"[{self.name}] Activating: Regeneration requested by {msg.from_agent}")
+                    return True
+        
+        print(f"[{self.name}] Skipping: Questions already exist")
+        return False
 
     def run(self, state):
-        product = state["product"]
+        """Generate categorized questions using LLM reasoning."""
+        print(f"\n[{self.name}] Generating questions...")
+        
+        product = state.get("product")
+        
+        if not product:
+            # Request product parsing from another agent
+            return self.send_message(
+                to_agent="parse_product_worker",
+                message_type=MessageType.REQUEST,
+                content={"action": "parse", "reason": "Need product data for questions"}
+            )
 
         system_prompt = """You are an expert content strategist specializing in e-commerce product pages.
 Your task is to generate user questions that potential customers might ask about a product.
@@ -55,20 +94,35 @@ Generate realistic, specific questions that customers would ask about this produ
             
             # Validate we have at least 15 questions
             total_questions = sum(len(q_list) for q_list in questions.values())
-            print(f"Generated {total_questions} categorized questions")
+            print(f"[{self.name}] ✓ Generated {total_questions} categorized questions")
             
-            return {"questions": questions}
+            # Notify other agents that questions are ready
+            notification = self.send_message(
+                to_agent="broadcast",
+                message_type=MessageType.NOTIFY,
+                content={
+                    "status": "questions_ready",
+                    "question_count": total_questions,
+                    "categories": list(questions.keys())
+                }
+            )
+            
+            result = {"questions": questions, "completed_tasks": ["generate_questions"]}
+            result["messages"] = notification["messages"]
+            return result
+            
         except json.JSONDecodeError as e:
-            print(f"Warning: Failed to parse LLM response as JSON: {e}")
+            print(f"[{self.name}] Warning: Failed to parse LLM response as JSON: {e}")
             print(f"Response was: {response[:200]}...")
             # Fallback to basic questions
             return self._generate_fallback_questions(product)
         except Exception as e:
-            print(f"Error generating questions: {e}")
+            print(f"[{self.name}] Error generating questions: {e}")
             return self._generate_fallback_questions(product)
     
     def _generate_fallback_questions(self, product):
         """Fallback questions if LLM fails."""
+        print(f"[{self.name}] Using fallback questions")
         return {
             "questions": {
                 "informational": [
@@ -95,5 +149,6 @@ Generate realistic, specific questions that customers would ask about this produ
                     "How does this compare to similar products?",
                     "What makes this product unique?"
                 ]
-            }
+            },
+            "completed_tasks": ["generate_questions"]
         }
